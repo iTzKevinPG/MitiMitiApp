@@ -18,9 +18,9 @@ type AuthState = {
   clearAuth: (options?: { redirect?: boolean; expired?: boolean }) => void
 }
 
-const STORAGE_KEY = 'fairsplit_auth_token'
-const STORAGE_EMAIL_KEY = 'fairsplit_auth_email'
-export const STORAGE_EXPIRED_FLAG = 'fairsplit_auth_expired'
+const STORAGE_KEY = 'mitimiti_auth_token'
+const STORAGE_EMAIL_KEY = 'mitimiti_auth_email'
+export const STORAGE_EXPIRED_FLAG = 'mitimiti_auth_expired'
 const FIXED_CODE_MODE = import.meta.env.VITE_AUTH_FIXED_CODE_MODE === 'true'
 
 function loadStoredAuth() {
@@ -113,8 +113,8 @@ export const useAuthStore = create<AuthState>((set, get) => {
       set({ token: undefined, email: '', error: undefined })
       void (async () => {
         try {
-          const { useFairSplitStore } = await import('./fairsplitStore')
-          await useFairSplitStore.getState().resetForLogout()
+          const { useAppStore } = await import('./appStore')
+          await useAppStore.getState().resetForLogout()
         } catch {
           // ignore
         }

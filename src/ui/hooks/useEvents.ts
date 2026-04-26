@@ -1,6 +1,6 @@
 import { useCallback } from 'react'
 import type { CreateEventInput } from '../../application/dto/eventDtos'
-import { useFairSplitStore } from '../../shared/state/fairsplitStore'
+import { useAppStore } from '../../shared/state/appStore'
 
 export function useEvents() {
   const {
@@ -12,7 +12,7 @@ export function useEvents() {
     removeEvent,
     loadEventDetailsForList,
     isEventLoaded,
-  } = useFairSplitStore()
+  } = useAppStore()
 
   const loadEvents = useCallback(
     async (options?: { loadDetails?: boolean }) => {

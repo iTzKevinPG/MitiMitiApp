@@ -9,7 +9,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '../../shared/components/ui/select'
-import type { EventForUI } from '../../shared/state/fairsplitStore'
+import type { EventForUI } from '../../shared/state/appStore'
 
 interface EventSelectorProps {
   events: EventForUI[]

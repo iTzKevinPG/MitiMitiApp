@@ -2,7 +2,7 @@ import { useState } from 'react'
 
 type Theme = 'light' | 'dark'
 
-const STORAGE_KEY = 'fairsplit_theme'
+const STORAGE_KEY = 'mitimiti_theme'
 
 export function useTheme() {
   const [theme, setTheme] = useState<Theme>(() => {

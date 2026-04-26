@@ -56,10 +56,12 @@ const invoiceRepository = new InMemoryInvoiceRepository(eventRepository)
 let demoSeeded = false
 const loadedEventData = new Set<string>()
 const loadingEventData = new Set<string>()
+// NOTE: key kept as 'mitimiti_local_state' intentionally — renaming would wipe existing user data.
+// Migrate with a dual-key fallback in a future release.
 const LOCAL_STORAGE_KEY = 'mitimiti_local_state'
 
 type LocalState = Pick<
-  mitimitiState,
+  AppState,
   'events' | 'selectedEventId' | 'transferStatusesByEvent' | 'hasSeededDemo'
 >
 
@@ -74,7 +76,7 @@ function readLocalState(): LocalState | null {
   }
 }
 
-function writeLocalState(state: mitimitiState) {
+function writeLocalState(state: AppState) {
   if (typeof window === 'undefined') return
   const payload: LocalState = {
     events: state.events,
@@ -173,7 +175,7 @@ async function handleUnauthorizedAndRedirect() {
   }
 }
 
-interface mitimitiState {
+interface AppState {
   events: Event[]
   selectedEventId?: EventId
   hasSeededDemo: boolean
@@ -223,7 +225,7 @@ interface mitimitiState {
   resetForLogout: () => Promise<void>
 }
 
-export const usemitimitiStore = create<mitimitiState>((set, get) => ({
+export const useAppStore = create<AppState>((set, get) => ({
   events: [],
   selectedEventId: undefined,
   hasSeededDemo: false,
@@ -923,7 +925,7 @@ export const usemitimitiStore = create<mitimitiState>((set, get) => ({
 
 if (typeof window !== 'undefined') {
   let saveTimeout: number | null = null
-  usemitimitiStore.subscribe((state) => {
+  useAppStore.subscribe((state) => {
     if (getAuthToken()) return
     if (saveTimeout !== null) {
       window.clearTimeout(saveTimeout)
@@ -941,7 +943,7 @@ function buildTransferStatusKey(fromPersonId: string, toPersonId: string) {
 
 async function loadEventData(
   eventId: EventId,
-  setFn: StoreApi<mitimitiState>['setState'],
+  setFn: StoreApi<AppState>['setState'],
 ) {
   if (loadedEventData.has(eventId) || loadingEventData.has(eventId)) {
     return
@@ -1027,7 +1029,7 @@ async function loadEventData(
     })
 
     const events = await eventRepository.list()
-    setFn((state: mitimitiState) => ({
+    setFn((state: AppState) => ({
       events,
       selectedEventId: state.selectedEventId ?? eventId,
     }))

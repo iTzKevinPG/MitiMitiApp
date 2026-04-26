@@ -3,7 +3,7 @@ import { Button } from '../../../shared/components/ui/button'
 import { Input } from '../../../shared/components/ui/input'
 import { MemberChip } from '../MemberChip'
 import type { InvoiceItem } from '../../../domain/invoice/Invoice'
-import type { PersonForUI } from '../../../shared/state/fairsplitStore'
+import type { PersonForUI } from '../../../shared/state/appStore'
 import { createId } from '../../../shared/utils/createId'
 
 interface InvoiceItemModalProps {

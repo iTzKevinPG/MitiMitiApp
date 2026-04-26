@@ -3,7 +3,7 @@ import { useLocation } from 'react-router-dom'
 import { useTour, type PopoverContentProps, type StepType } from '@reactour/tour'
 import { Sparkles } from 'lucide-react'
 import { Button } from '../../shared/components/ui/button'
-import { useFairSplitStore } from '../../shared/state/fairsplitStore'
+import { useAppStore } from '../../shared/state/appStore'
 
 type RequirementKey =
   | 'none'
@@ -12,7 +12,7 @@ type RequirementKey =
   | 'invoice-added'
   | 'invoice-add-menu-open'
   | 'invoice-form-open'
-  | 'invoice-advanced'
+  | 'invoice-split-step'
   | 'invoice-description'
   | 'invoice-amount'
   | 'tab-people'
@@ -70,6 +70,7 @@ const autoAdvanceRequirements: RequirementKey[] = [
   'invoice-added',
   'invoice-form-open',
   'invoice-add-menu-open',
+  'invoice-split-step',
 ]
 
 const homeSteps: GuideStepConfig[] = [
@@ -125,7 +126,7 @@ const eventSteps: GuideStepConfig[] = [
   {
     selector: '[data-tour="invoice-add"]',
     title: 'Agregar gasto',
-    description: 'Abre el selector para elegir como agregar un gasto.',
+    description: 'Abre el menu para empezar el nuevo flujo de gasto.',
     requirement: 'invoice-add-menu-open',
     tabId: 'invoices',
     hint: 'Pulsa "Agregar gasto" para ver las opciones.',
@@ -135,7 +136,7 @@ const eventSteps: GuideStepConfig[] = [
   {
     selector: '[data-tour="invoice-add-manual"]',
     title: 'Tipo de gasto',
-    description: 'Selecciona Manual para abrir el formulario.',
+    description: 'Selecciona Manual para abrir el modal por pasos.',
     requirement: 'invoice-form-open',
     tabId: 'invoices',
     hint: 'Selecciona Manual para continuar.',
@@ -161,16 +162,6 @@ const eventSteps: GuideStepConfig[] = [
     resizeObservables: ['[data-tour-active-tab]'],
   },
   {
-    selector: '[data-tour="invoice-advanced-toggle"]',
-    title: 'Opciones avanzadas',
-    description:
-      'Vista rapida de propina, invitado especial, participantes o consumo. No requiere accion.',
-    requirement: 'none',
-    tabId: 'invoices',
-    mutationObservables: ['[data-tour-active-tab]'],
-    resizeObservables: ['[data-tour-active-tab]'],
-  },
-  {
     selector: '[data-tour="invoice-payer"]',
     title: 'Pagador',
     description: 'Selecciona quien pago este gasto.',
@@ -181,12 +172,33 @@ const eventSteps: GuideStepConfig[] = [
     resizeObservables: ['[data-tour-active-tab]'],
   },
   {
+    selector: '[data-tour="invoice-step-next"]',
+    title: 'Continuar',
+    description: 'Usa este boton del modal para pasar del paso Basico al paso Reparto.',
+    requirement: 'none',
+    tabId: 'invoices',
+    hint: 'Pulsa "Continuar" dentro del modal para abrir el paso de reparto.',
+    position: 'top',
+    mutationObservables: ['[data-tour-active-tab]'],
+    resizeObservables: ['[data-tour-active-tab]'],
+  },
+  {
+    selector: '[data-tour="invoice-split-step"]',
+    title: 'Reparto',
+    description:
+      'Aqui eliges si el gasto va por partes iguales o por consumo y activas extras como propina, participantes e invitado especial.',
+    requirement: 'none',
+    tabId: 'invoices',
+    mutationObservables: ['[data-tour-active-tab]'],
+    resizeObservables: ['[data-tour-active-tab]'],
+  },
+  {
     selector: '[data-tour="invoice-save"]',
     title: 'Guardar gasto',
-    description: 'Guarda el gasto para ver el resumen.',
+    description: 'En la confirmacion final guardas el gasto para ver el resumen.',
     requirement: 'invoice-added',
     tabId: 'invoices',
-    hint: 'Guarda el gasto para continuar.',
+    hint: 'Avanza en el modal hasta la confirmacion final y guarda el gasto.',
     mutationObservables: ['[data-tour-active-tab]', '[data-tour="invoice-section"]'],
     resizeObservables: ['[data-tour-active-tab]', '[data-tour="invoice-section"]'],
   },
@@ -255,7 +267,7 @@ function GuideStepContent({
 }: PopoverContentProps & { config: GuideStepConfig }) {
   const { isOpen } = useTour()
   const pathname = typeof window !== 'undefined' ? window.location.pathname : ''
-  const selectedEvent = useFairSplitStore((state) => state.getSelectedEvent())
+  const selectedEvent = useAppStore((state) => state.getSelectedEvent())
   const [activeTab, setActiveTab] = useState<string | null>(() => {
     if (typeof document === 'undefined') return null
     return (
@@ -336,11 +348,11 @@ function GuideStepContent({
       case 'invoice-added':
         return invoiceCount > 0
       case 'invoice-add-menu-open':
-        return hasVisibleSection('[data-tour="invoice-add-menu"][open]')
+        return hasVisibleSection('[data-tour="invoice-add-menu"] [data-state="open"]')
       case 'invoice-form-open':
         return hasVisibleSection('[data-tour="invoice-form"]')
-      case 'invoice-advanced':
-        return hasVisibleSection('[data-tour="invoice-advanced"]')
+      case 'invoice-split-step':
+        return hasVisibleSection('[data-tour="invoice-split-step"]')
       case 'invoice-description': {
         const value = getInputValue('[data-tour="invoice-description"]')
         return value.trim().length > 0
@@ -438,6 +450,29 @@ function GuideStepContent({
           .querySelector('[data-tour-active-tab]')
           ?.getAttribute('data-tour-active-tab') ??
         null
+      const waitForPendingSelector = () => {
+        if (!selector) {
+          setCurrentStep(nextIndex)
+          return
+        }
+        const existing = document.querySelector(selector)
+        if (existing) {
+          setCurrentStep(nextIndex)
+          return
+        }
+        clearPendingStep()
+        pendingStepRef.current = nextIndex
+        pendingSelectorRef.current = selector
+        pendingTimeoutRef.current = window.setTimeout(() => {
+          if (pendingStepRef.current !== nextIndex) return
+          setCurrentStep(nextIndex)
+          clearPendingStep()
+        }, 1500)
+        waitForSelector(selector, () => {
+          setCurrentStep(nextIndex)
+          clearPendingStep()
+        })
+      }
       if (target?.tabId) {
         window.dispatchEvent(
           new CustomEvent('tour:go-tab', { detail: { tabId: target.tabId } }),
@@ -457,10 +492,10 @@ function GuideStepContent({
         window.dispatchEvent(
           new CustomEvent('tour:go-tab', { detail: { tabId: target.tabId } }),
         )
-        setCurrentStep(nextIndex)
+        waitForPendingSelector()
         return
       }
-      setCurrentStep(nextIndex)
+      waitForPendingSelector()
     },
     [activeTab, clearPendingStep, pathname, setCurrentStep, steps],
   )
@@ -472,6 +507,15 @@ function GuideStepContent({
     lastAutoAdvanceRef.current = currentStep
     handleStepChange(currentStep + 1)
   }, [config.requirement, currentStep, requirementMet, steps, handleStepChange])
+
+  useEffect(() => {
+    if (config.selector !== '[data-tour="invoice-step-next"]') return
+    if (!isOpen || !steps || currentStep >= steps.length - 1) return
+    if (!hasVisibleSection('[data-tour="invoice-split-step"]')) return
+    if (lastAutoAdvanceRef.current === currentStep) return
+    lastAutoAdvanceRef.current = currentStep
+    handleStepChange(currentStep + 1)
+  }, [config.selector, currentStep, handleStepChange, isOpen, requirementTick, steps])
 
   useEffect(() => {
     if (!isOpen || !config.tabId) return
@@ -589,6 +633,16 @@ function GuideStepContent({
                 : 'cursor-not-allowed bg-[color:var(--color-surface-muted)] text-[color:var(--color-text-muted)]'
             }`}
             onClick={() => {
+              if (config.selector === '[data-tour="invoice-step-next"]') {
+                const nextButton = document.querySelector<HTMLButtonElement>(
+                  '[data-tour="invoice-step-next"]',
+                )
+                nextButton?.click()
+                window.setTimeout(() => {
+                  handleStepChange(currentStep + 1)
+                }, 120)
+                return
+              }
               if (!requirementMet) return
               if (isLastStep) {
                 setIsOpen(false)
@@ -620,7 +674,7 @@ export function QuickGuideButton() {
       'invoice-added',
       'invoice-add-menu-open',
       'invoice-form-open',
-      'invoice-advanced',
+      'invoice-split-step',
       'tab-invoices',
       'tab-people',
       'tab-summary',

@@ -2,7 +2,7 @@ import { ChevronDown, ChevronUp, Edit2, Plus, Trash2 } from 'lucide-react'
 import { ActionMenu } from '../../../shared/components/ActionMenu'
 import { Button } from '../../../shared/components/ui/button'
 import type { InvoiceItem } from '../../../domain/invoice/Invoice'
-import type { PersonForUI } from '../../../shared/state/fairsplitStore'
+import type { PersonForUI } from '../../../shared/state/appStore'
 
 interface ConsumptionItemsSectionProps {
   currency: string

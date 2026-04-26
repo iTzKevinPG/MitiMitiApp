@@ -1,4 +1,4 @@
-﻿# FairSplit
+﻿# MitiMiti
 
 Mini app para dividir gastos entre amigos. Primera versión solo front-end, estado en memoria y arquitectura lista para conectar un backend luego.
 
