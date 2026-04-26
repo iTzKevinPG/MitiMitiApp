@@ -28,6 +28,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '../../shared/components/ui/select'
+import { calculateShares } from '../../domain/invoice/calculateShares'
 
 interface BentoOverviewProps {
   people: PersonForUI[]
@@ -748,36 +749,7 @@ function InvoiceDetailModal({
     modalRef.current?.focus()
   }, [])
 
-  // Per-person summary — mirrors SettlementService logic exactly
-  const tip = roundToCents(invoice.tipAmount ?? 0)
-  const tipReceivers = invoice.birthdayPersonId
-    ? invoice.participantIds.filter((id) => id !== invoice.birthdayPersonId)
-    : invoice.participantIds
-  const tipShare = tipReceivers.length > 0 ? roundToCents(tip / tipReceivers.length) : 0
-
-  const perPersonSummary = invoice.participantIds.map((personId) => {
-    let base = 0
-
-    if (invoice.divisionMethod === 'consumption') {
-      base = roundToCents(Number((invoice.consumptions ?? {})[personId] ?? 0))
-    } else {
-      const count = invoice.participantIds.length
-      const equalShare = count > 0 ? roundToCents(invoice.amount / count) : 0
-      if (invoice.birthdayPersonId === personId) {
-        base = 0
-      } else if (invoice.birthdayPersonId) {
-        const nonBirthday = invoice.participantIds.filter((id) => id !== invoice.birthdayPersonId)
-        base = nonBirthday.length > 0 ? roundToCents(invoice.amount / nonBirthday.length) : equalShare
-      } else {
-        base = equalShare
-      }
-    }
-
-    const personTip = tipReceivers.includes(personId) ? tipShare : 0
-    const consumed = roundToCents(base + personTip)
-    const paid = personId === invoice.payerId ? total : 0
-    return { personId, paid, consumed, net: roundToCents(paid - consumed) }
-  })
+  const shares = calculateShares(invoice, people)
 
   return (
     <div
@@ -883,37 +855,33 @@ function InvoiceDetailModal({
             <div>
               <SectionLabel>Items</SectionLabel>
               <div className="space-y-1.5">
-                {invoice.items.map((item) => {
-                  const consumers =
-                    (item as unknown as { consumers?: string[] }).consumers ?? []
-                  return (
-                    <div
-                      key={item.id}
-                      className="flex items-center gap-2 rounded-xl bg-[color:var(--color-surface-muted)] px-3 py-2"
-                    >
-                      <div className="flex-1 min-w-0">
-                        <p className="text-xs font-semibold text-[color:var(--color-text-main)] truncate">
-                          {item.name}
-                        </p>
-                        {consumers.length > 0 && (
-                          <p className="text-[10px] text-[color:var(--color-text-muted)]">
-                            {consumers
-                              .map((cId) => resolvePersonName(cId, people))
-                              .join(', ')}
-                          </p>
-                        )}
-                      </div>
-                      <div className="shrink-0 text-right">
+                {invoice.items.map((item) => (
+                  <div
+                    key={item.id}
+                    className="flex items-center gap-2 rounded-xl border border-[color:var(--color-border-subtle)] bg-[color:var(--color-surface-muted)] px-3 py-2"
+                  >
+                    <div className="flex-1 min-w-0">
+                      <p className="text-xs font-semibold text-[color:var(--color-text-main)] truncate">
+                        {item.name}
+                      </p>
+                      {item.participantIds.length > 0 && (
                         <p className="text-[10px] text-[color:var(--color-text-muted)]">
-                          {item.quantity}× {fmtAmount(item.unitPrice, currency)}
+                          {item.participantIds
+                            .map((cId) => resolvePersonName(cId, people))
+                            .join(', ')}
                         </p>
-                        <p className="text-xs font-bold text-[color:var(--color-primary-main)] tabular-nums">
-                          {fmtAmount(item.unitPrice * item.quantity, currency)}
-                        </p>
-                      </div>
+                      )}
                     </div>
-                  )
-                })}
+                    <div className="shrink-0 text-right">
+                      <p className="text-[10px] text-[color:var(--color-text-muted)]">
+                        {item.quantity}× {fmtAmount(item.unitPrice, currency)}
+                      </p>
+                      <p className="text-xs font-bold text-[color:var(--color-primary-main)] tabular-nums">
+                        {fmtAmount(item.unitPrice * item.quantity, currency)}
+                      </p>
+                    </div>
+                  </div>
+                ))}
               </div>
             </div>
           ) : null}
@@ -922,36 +890,33 @@ function InvoiceDetailModal({
           <div>
             <SectionLabel>Resumen por persona</SectionLabel>
             <div className="space-y-1.5">
-              {perPersonSummary.map(({ personId, paid, consumed, net }) => {
-                const isPos = net > 0.01
-                const isNeg = net < -0.01
-                return (
-                  <div
-                    key={personId}
-                    className="flex items-center justify-between rounded-xl bg-[color:var(--color-surface-muted)] px-3 py-2"
-                  >
-                    <div>
-                      <p className="text-xs font-bold text-[color:var(--color-text-main)]">
-                        {resolvePersonName(personId, people)}
-                      </p>
+              {shares.map((share) => (
+                <div
+                  key={share.personId}
+                  className="flex items-center justify-between rounded-xl border border-[color:var(--color-border-subtle)] bg-[color:var(--color-surface-muted)] px-3 py-2"
+                >
+                  <div>
+                    <p className="flex items-center gap-1.5 text-xs font-bold text-[color:var(--color-text-main)]">
+                      {share.name}
+                      {share.isBirthday && <span>🎂</span>}
+                      {share.personId === invoice.payerId && (
+                        <span className="rounded-full bg-[color:var(--color-primary-main)]/15 px-1.5 py-0.5 text-[9px] font-bold text-[color:var(--color-primary-main)]">
+                          pagó
+                        </span>
+                      )}
+                    </p>
+                    {share.tipPortion > 0 && (
                       <p className="text-[10px] text-[color:var(--color-text-muted)]">
-                        Pagó {fmtAmount(paid, currency)} · Consume {fmtAmount(consumed, currency)}
+                        <Sparkles className="mr-0.5 inline h-2.5 w-2.5 text-[color:var(--color-accent-warning)]" />
+                        Propina: {fmtAmount(share.tipPortion, currency)}
                       </p>
-                    </div>
-                    <span
-                      className={`text-sm font-bold tabular-nums ${
-                        isPos
-                          ? 'text-[color:var(--color-accent-success)]'
-                          : isNeg
-                            ? 'text-[color:var(--color-accent-danger)]'
-                            : 'text-[color:var(--color-text-muted)]'
-                      }`}
-                    >
-                      {net > 0 ? '+' : ''}{fmtAmount(net, currency)}
-                    </span>
+                    )}
                   </div>
-                )
-              })}
+                  <span className="text-sm font-bold tabular-nums text-[color:var(--color-primary-main)]">
+                    {fmtAmount(share.amount, currency)}
+                  </span>
+                </div>
+              ))}
             </div>
           </div>
         </div>
