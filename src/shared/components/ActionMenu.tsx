@@ -97,7 +97,11 @@ export function ActionMenu({
   )
 
   return (
-    <div className={`relative ${open ? 'z-[60]' : ''}`} ref={menuRef}>
+    <div
+      className={`relative ${open ? 'z-[60]' : ''}`}
+      ref={menuRef}
+      data-state={open ? 'open' : 'closed'}
+    >
       <div ref={triggerRef}>{triggerNode}</div>
       {open ? (
         <div

@@ -15,14 +15,14 @@ const features = [
   {
     Icon: Receipt,
     title: 'Registra gastos',
-    description: 'Anota quién pagó y cuánto, manual o escaneando tickets.',
+    description: 'Anota quien pago y cuanto de forma manual, clara y rapida.',
     accent: 'text-[color:var(--color-accent-coral)]',
     bg: 'bg-[color:var(--color-accent-coral-soft)]',
   },
   {
     Icon: ArrowRightLeft,
     title: 'Salda cuentas',
-    description: 'FairSplit calcula quién le debe a quién automáticamente.',
+    description: 'FairSplit calcula quien le debe a quien automaticamente.',
     accent: 'text-[color:var(--color-accent-lila)]',
     bg: 'bg-[color:var(--color-accent-lila-soft)]',
   },
@@ -65,41 +65,52 @@ export function WelcomeModal() {
           <X className="h-4 w-4" />
         </Button>
 
-        {/* Hero */}
         <div className="flex flex-col items-center bg-gradient-to-b from-[color:var(--color-primary-soft)] to-transparent px-6 pb-4 pt-8">
           <div className="mb-3 flex h-14 w-14 items-center justify-center rounded-full bg-[color:var(--color-primary-main)] shadow-[var(--shadow-md)]">
-            <Sparkles className="h-7 w-7 text-[color:var(--color-text-on-primary)]" strokeWidth={1.5} />
+            <Sparkles
+              className="h-7 w-7 text-[color:var(--color-text-on-primary)]"
+              strokeWidth={1.5}
+            />
           </div>
           <h2 className="text-xl font-bold text-[color:var(--color-text-main)]">
-            ¡Bienvenido a FairSplit!
+            Bienvenido a FairSplit
           </h2>
           <p className="mt-1 text-center text-sm text-[color:var(--color-text-muted)]">
             Divide gastos con amigos de forma justa y sin dramas.
           </p>
         </div>
 
-        {/* Features */}
         <div className="space-y-3 px-6 pb-2">
           {features.map(({ Icon, title, description, accent, bg }) => (
             <div key={title} className="flex items-start gap-3">
-              <div className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-full ${bg}`}>
+              <div
+                className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-full ${bg}`}
+              >
                 <Icon className={`h-4 w-4 ${accent}`} strokeWidth={1.8} />
               </div>
               <div>
-                <p className="text-sm font-semibold text-[color:var(--color-text-main)]">{title}</p>
-                <p className="text-xs text-[color:var(--color-text-muted)]">{description}</p>
+                <p className="text-sm font-semibold text-[color:var(--color-text-main)]">
+                  {title}
+                </p>
+                <p className="text-xs text-[color:var(--color-text-muted)]">
+                  {description}
+                </p>
               </div>
             </div>
           ))}
         </div>
 
-        {/* Actions */}
         <div className="flex flex-col gap-2 px-6 pb-6 pt-4">
           <Button type="button" onClick={handleStartGuide} className="w-full">
             <Sparkles className="h-4 w-4" />
-            Iniciar guía rápida
+            Iniciar guia rapida
           </Button>
-          <Button type="button" variant="ghost" onClick={handleClose} className="w-full text-sm">
+          <Button
+            type="button"
+            variant="ghost"
+            onClick={handleClose}
+            className="w-full text-sm"
+          >
             Explorar por mi cuenta
           </Button>
         </div>
