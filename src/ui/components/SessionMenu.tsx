@@ -180,7 +180,7 @@ export function SessionMenu({ isOpen, onClose, onOpenProfile, backLink }: Sessio
         {/* Menu footer */}
         <div className="border-t border-[color:var(--color-border-subtle)] px-5 py-3">
           <p className="text-center text-[10px] text-[color:var(--color-text-muted)]">
-            FairSplit · Divide gastos sin dramas ✌️
+            MitiMiti · Divide gastos sin dramas ✌️
           </p>
         </div>
       </div>

@@ -5,7 +5,7 @@ import { Badge } from '../../shared/components/ui/badge'
 import { Button } from '../../shared/components/ui/button'
 import { toast } from '../../shared/components/ui/sonner'
 import { useAuthStore } from '../../shared/state/authStore'
-import { useFairSplitStore } from '../../shared/state/fairsplitStore'
+import { useAppStore } from '../../shared/state/appStore'
 import { BentoOverview } from '../components/BentoOverview'
 import { Footer } from '../components/Footer'
 import { useEvents } from '../hooks/useEvents'
@@ -31,7 +31,7 @@ function EventOverviewPage() {
     refreshEventDetails,
     loadTransferStatuses,
     transferStatusesByEvent,
-  } = useFairSplitStore()
+  } = useAppStore()
   const hasLoadedRef = useRef(false)
   const isAuthenticated = useAuthStore((state) => Boolean(state.token))
 
@@ -103,7 +103,7 @@ function EventOverviewPage() {
     if (isMobile && navigator.share) {
       try {
         await navigator.share({
-          title: 'FairSplit',
+          title: 'MitiMiti',
           text: 'Vista general del evento',
           url: shareUrl,
         })
@@ -182,10 +182,10 @@ function EventOverviewPage() {
             <div className="mx-auto flex h-16 max-w-5xl items-center justify-between px-6">
               <div className="flex items-center gap-3">
                 <div className="flex h-9 w-9 items-center justify-center overflow-hidden rounded-lg bg-[color:var(--color-surface-card)]">
-                  <img src={fairLogo} alt="FairSplit" className="h-8 w-8 object-contain" />
+                  <img src={fairLogo} alt="MitiMiti" className="h-8 w-8 object-contain" />
                 </div>
                 <span className="text-lg font-semibold text-[color:var(--color-text-main)]">
-                  FairSplit
+                  MitiMiti
                 </span>
               </div>
             </div>
@@ -208,10 +208,10 @@ function EventOverviewPage() {
         <div className="mx-auto flex h-16 max-w-5xl items-center justify-between px-6">
           <div className="flex items-center gap-3">
             <div className="flex h-9 w-9 items-center justify-center overflow-hidden rounded-lg bg-[color:var(--color-surface-card)]">
-              <img src={fairLogo} alt="FairSplit" className="h-8 w-8 object-contain" />
+              <img src={fairLogo} alt="MitiMiti" className="h-8 w-8 object-contain" />
             </div>
             <span className="text-lg font-semibold text-[color:var(--color-text-main)]">
-              FairSplit
+              MitiMiti
             </span>
           </div>
           <ThemeToggle />

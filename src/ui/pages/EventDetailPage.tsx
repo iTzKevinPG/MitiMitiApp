@@ -12,7 +12,7 @@ import { Link, useNavigate, useParams } from 'react-router-dom'
 import { Button } from '../../shared/components/ui/button'
 import { toast } from '../../shared/components/ui/sonner'
 import { useAuthStore } from '../../shared/state/authStore'
-import { useFairSplitStore } from '../../shared/state/fairsplitStore'
+import { useAppStore } from '../../shared/state/appStore'
 import { useEvents } from '../hooks/useEvents'
 import { useConfetti } from '../hooks/useConfetti'
 import { BentoOverview } from '../components/BentoOverview'
@@ -70,7 +70,7 @@ function EventDetailPage() {
     transferStatusesByEvent,
     setTransferStatus,
     refreshEventDetails,
-  } = useFairSplitStore()
+  } = useAppStore()
 
   const [activeTab, setActiveTab] = useState<
     'people' | 'invoices' | 'summary' | 'transfers' | 'overview'
@@ -185,7 +185,7 @@ function EventDetailPage() {
     if (isMobile && navigator.share) {
       try {
         await navigator.share({
-          title: 'FairSplit',
+          title: 'MitiMiti',
           text: 'Vista general del evento',
           url: shareUrl,
         })
@@ -286,9 +286,9 @@ function EventDetailPage() {
               className="flex items-center gap-2 rounded-xl px-2 py-1.5 text-[color:var(--color-text-muted)] transition-colors hover:bg-[color:var(--color-surface-muted)] hover:text-[color:var(--color-text-main)]"
             >
               <ArrowLeft className="h-4 w-4" />
-              <img src={fairLogo} alt="FairSplit" className="h-7 w-7 object-contain sm:h-8 sm:w-8" />
+              <img src={fairLogo} alt="MitiMiti" className="h-7 w-7 object-contain sm:h-8 sm:w-8" />
               <span className="hidden text-base font-semibold text-[color:var(--color-text-main)] sm:inline sm:text-lg">
-                FairSplit
+                MitiMiti
               </span>
             </Link>
           </div>

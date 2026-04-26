@@ -10,7 +10,7 @@ import { OcrDecisionModal } from './invoice/OcrDecisionModal'
 import { ScanProgressBanner } from './invoice/ScanProgressBanner'
 import { ExpenseEditorModal } from './invoice/ExpenseEditorModal'
 import type { InvoiceItem } from '../../domain/invoice/Invoice'
-import type { InvoiceForUI, PersonForUI } from '../../shared/state/fairsplitStore'
+import type { InvoiceForUI, PersonForUI } from '../../shared/state/appStore'
 import {
   calculateShares,
   buildConsumptionsFromItems,

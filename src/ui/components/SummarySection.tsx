@@ -1,6 +1,6 @@
 import { BarChart3, Sparkles, TrendingDown, TrendingUp } from 'lucide-react'
 import type { Balance } from '../../domain/settlement/Balance'
-import type { InvoiceForUI, PersonForUI } from '../../shared/state/fairsplitStore'
+import type { InvoiceForUI, PersonForUI } from '../../shared/state/appStore'
 import { AmountDisplay } from './AmountDisplay'
 import { EmptyStateIllustration } from './EmptyStateIllustration'
 import { SectionCard } from './SectionCard'

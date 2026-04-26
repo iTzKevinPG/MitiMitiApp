@@ -3,7 +3,7 @@ import { useLocation } from 'react-router-dom'
 import { useTour, type PopoverContentProps, type StepType } from '@reactour/tour'
 import { Sparkles } from 'lucide-react'
 import { Button } from '../../shared/components/ui/button'
-import { useFairSplitStore } from '../../shared/state/fairsplitStore'
+import { useAppStore } from '../../shared/state/appStore'
 
 type RequirementKey =
   | 'none'
@@ -267,7 +267,7 @@ function GuideStepContent({
 }: PopoverContentProps & { config: GuideStepConfig }) {
   const { isOpen } = useTour()
   const pathname = typeof window !== 'undefined' ? window.location.pathname : ''
-  const selectedEvent = useFairSplitStore((state) => state.getSelectedEvent())
+  const selectedEvent = useAppStore((state) => state.getSelectedEvent())
   const [activeTab, setActiveTab] = useState<string | null>(() => {
     if (typeof document === 'undefined') return null
     return (

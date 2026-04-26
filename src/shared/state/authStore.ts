@@ -113,8 +113,8 @@ export const useAuthStore = create<AuthState>((set, get) => {
       set({ token: undefined, email: '', error: undefined })
       void (async () => {
         try {
-          const { useFairSplitStore } = await import('./fairsplitStore')
-          await useFairSplitStore.getState().resetForLogout()
+          const { useAppStore } = await import('./appStore')
+          await useAppStore.getState().resetForLogout()
         } catch {
           // ignore
         }

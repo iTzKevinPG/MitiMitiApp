@@ -19,7 +19,7 @@ import {
 import type { Balance } from '../../domain/settlement/Balance'
 import type { SettlementTransfer } from '../../domain/settlement/SettlementTransfer'
 import type { TransferStatus } from '../../domain/settlement/TransferStatus'
-import type { InvoiceForUI, PersonForUI } from '../../shared/state/fairsplitStore'
+import type { InvoiceForUI, PersonForUI } from '../../shared/state/appStore'
 import { AmountDisplay } from './AmountDisplay'
 import {
   Select,
@@ -502,7 +502,6 @@ function PersonCard({
   const net = balance?.net ?? 0
   const isCreditor = net > 0.01
   const isDebtor = net < -0.01
-  const isNeutral = !isCreditor && !isDebtor
 
   return (
     <div

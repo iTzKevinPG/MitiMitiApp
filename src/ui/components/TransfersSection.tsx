@@ -1,6 +1,6 @@
 import { CheckCircle2, Clock, Handshake, Sparkles } from 'lucide-react'
 import type { SettlementTransfer } from '../../domain/settlement/SettlementTransfer'
-import type { PersonForUI } from '../../shared/state/fairsplitStore'
+import type { PersonForUI } from '../../shared/state/appStore'
 import { EmptyStateIllustration } from './EmptyStateIllustration'
 import { SectionCard } from './SectionCard'
 

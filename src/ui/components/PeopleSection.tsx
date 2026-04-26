@@ -6,7 +6,7 @@ import { ActionMenu } from '../../shared/components/ActionMenu'
 import { Button } from '../../shared/components/ui/button'
 import { Input } from '../../shared/components/ui/input'
 import { SectionCard } from './SectionCard'
-import type { PersonForUI } from '../../shared/state/fairsplitStore'
+import type { PersonForUI } from '../../shared/state/appStore'
 import { toast } from '../../shared/components/ui/sonner'
 
 interface PeopleSectionProps {

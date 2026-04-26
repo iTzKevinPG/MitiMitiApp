@@ -39,7 +39,7 @@ export function ProfileModal({ isOpen, onClose }: ProfileModalProps) {
             Perfil
           </p>
           <h2 className="mt-1 text-xl font-bold text-[color:var(--color-text-main)]">
-            Tu cuenta de FairSplit
+            Tu cuenta de MitiMiti
           </h2>
           <p className="mt-1 text-center text-sm text-[color:var(--color-text-muted)]">
             Guarda tus datos en la nube y recupera tus eventos desde cualquier dispositivo.

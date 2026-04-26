@@ -96,9 +96,9 @@ function EventListPage() {
       <header className="sticky top-0 z-40 border-b border-[color:var(--color-border-subtle)] bg-[color:var(--color-surface-card)]/90 backdrop-blur-md">
         <div className="mx-auto flex h-14 max-w-5xl items-center justify-between px-4 sm:h-16 sm:px-6">
           <div className="flex items-center gap-2.5">
-            <img src={fairLogo} alt="FairSplit" className="h-7 w-7 object-contain sm:h-8 sm:w-8" />
+            <img src={fairLogo} alt="MitiMiti" className="h-7 w-7 object-contain sm:h-8 sm:w-8" />
             <span className="text-base font-semibold text-[color:var(--color-text-main)] sm:text-lg">
-              FairSplit
+              MitiMiti
             </span>
           </div>
           <div className="flex items-center gap-1.5 sm:gap-2">
@@ -114,7 +114,7 @@ function EventListPage() {
           <div className="space-y-6">
             <div className="space-y-3">
               <p className="text-xs font-semibold uppercase tracking-[0.25em] text-[color:var(--color-primary-main)]">
-                FairSplit
+                MitiMiti
               </p>
               <h1 className="text-3xl font-semibold text-[color:var(--color-text-main)] sm:text-4xl">
                 Crea un evento y empieza a dividir.

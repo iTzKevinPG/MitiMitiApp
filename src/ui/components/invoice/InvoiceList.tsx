@@ -8,12 +8,11 @@ import {
   Receipt,
   Sparkles,
   Trash2,
-  Users,
   X,
 } from 'lucide-react'
 import { ActionMenu } from '../../../shared/components/ActionMenu'
 import type { InvoiceItem } from '../../../domain/invoice/Invoice'
-import type { InvoiceForUI, PersonForUI } from '../../../shared/state/fairsplitStore'
+import type { InvoiceForUI, PersonForUI } from '../../../shared/state/appStore'
 import { EmptyStateIllustration } from '../EmptyStateIllustration'
 
 interface Share {

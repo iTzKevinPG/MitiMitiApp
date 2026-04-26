@@ -2,7 +2,7 @@ import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { MemoryRouter, Route, Routes } from 'react-router-dom'
 import EventDetailPage from './EventDetailPage'
-import { useFairSplitStore } from '../../shared/state/fairsplitStore'
+import { useAppStore as useFairSplitStore } from '../../shared/state/appStore'
 
 describe('EventDetailPage', () => {
   beforeEach(() => {

@@ -22,7 +22,7 @@ const features = [
   {
     Icon: ArrowRightLeft,
     title: 'Salda cuentas',
-    description: 'FairSplit calcula quien le debe a quien automaticamente.',
+    description: 'MitiMiti calcula quien le debe a quien automaticamente.',
     accent: 'text-[color:var(--color-accent-lila)]',
     bg: 'bg-[color:var(--color-accent-lila-soft)]',
   },
@@ -73,7 +73,7 @@ export function WelcomeModal() {
             />
           </div>
           <h2 className="text-xl font-bold text-[color:var(--color-text-main)]">
-            Bienvenido a FairSplit
+            Bienvenido a MitiMiti
           </h2>
           <p className="mt-1 text-center text-sm text-[color:var(--color-text-muted)]">
             Divide gastos con amigos de forma justa y sin dramas.

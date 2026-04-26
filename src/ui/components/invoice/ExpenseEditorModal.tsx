@@ -25,7 +25,7 @@ import {
 import { ConsumptionItemsSection } from './ConsumptionItemsSection'
 import { MemberChip } from '../MemberChip'
 import type { InvoiceItem } from '../../../domain/invoice/Invoice'
-import type { PersonForUI } from '../../../shared/state/fairsplitStore'
+import type { PersonForUI } from '../../../shared/state/appStore'
 
 type ExpenseStep = 'basic' | 'split' | 'items' | 'confirm'
 
