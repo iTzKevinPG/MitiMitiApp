@@ -54,6 +54,11 @@
     --color-info-bg: #e0f2fe;
     --color-focus-ring: var(--color-primary-light);
     --color-tour-mask: rgba(13, 148, 136, 0.2);
+    --scrollbar-track: color-mix(in srgb, var(--color-surface-muted) 82%, var(--color-app-bg));
+    --scrollbar-thumb: color-mix(in srgb, var(--color-primary-main) 72%, white);
+    --scrollbar-thumb-hover: var(--color-primary-dark);
+    --scrollbar-thumb-border: color-mix(in srgb, var(--color-surface-card) 88%, transparent);
+    --scrollbar-size: 10px;
 
     /* Spacing */
     --space-xs: 4px;
@@ -139,6 +144,10 @@
     --color-info-bg: #0b2c3b;
     --color-focus-ring: var(--color-primary-light);
     --color-tour-mask: rgba(45, 212, 191, 0.28);
+    --scrollbar-track: color-mix(in srgb, var(--color-surface-panel) 88%, var(--color-app-bg));
+    --scrollbar-thumb: color-mix(in srgb, var(--color-primary-light) 62%, var(--color-surface-card));
+    --scrollbar-thumb-hover: color-mix(in srgb, var(--color-primary-light) 82%, white);
+    --scrollbar-thumb-border: color-mix(in srgb, var(--color-surface-card) 28%, transparent);
 
     /* Shadows — teal tinted dark */
     --shadow-sm: 0 1px 3px rgba(20, 184, 166, 0.1);
@@ -161,6 +170,49 @@
   [data-theme='dark'] .reactour__overlay,
   [data-theme='dark'] .reactour__overlay--open {
     background: rgba(6, 12, 22, 0.6) !important;
+  }
+
+  html {
+    scrollbar-gutter: stable;
+  }
+
+  body,
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track);
+  }
+
+  *::-webkit-scrollbar {
+    width: var(--scrollbar-size);
+    height: var(--scrollbar-size);
+  }
+
+  *::-webkit-scrollbar-track {
+    background: var(--scrollbar-track);
+    border-radius: var(--radius-pill);
+  }
+
+  *::-webkit-scrollbar-thumb {
+    background: linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--scrollbar-thumb) 84%, white),
+      var(--scrollbar-thumb)
+    );
+    border: 2px solid var(--scrollbar-thumb-border);
+    border-radius: var(--radius-pill);
+    min-height: 40px;
+  }
+
+  *::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--scrollbar-thumb-hover) 88%, white),
+      var(--scrollbar-thumb-hover)
+    );
+  }
+
+  *::-webkit-scrollbar-corner {
+    background: transparent;
   }
 }
 
@@ -512,9 +564,11 @@
     animation: settle-pop 300ms ease-out;
   }
 
-.no-scrollbar::-webkit-scrollbar {
-  display: none;
-}
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+    width: 0;
+    height: 0;
+  }
 
 
   .no-scrollbar {
