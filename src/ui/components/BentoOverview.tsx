@@ -329,7 +329,6 @@ export function BentoOverview({
           <InvoiceDetailModal
             invoice={selectedInvoice}
             people={people}
-            balances={balances}
             currency={currency}
             onClose={() => setSelectedInvoice(null)}
           />,
@@ -595,7 +594,7 @@ function InvoiceCard({
   const total = roundToCents(invoice.amount + (invoice.tipAmount ?? 0))
 
   return (
-    <div className="group flex items-center gap-3 rounded-xl border border-[color:var(--color-border-subtle)] bg-[color:var(--color-surface-muted)] px-3.5 py-3 transition-all hover:border-[color:var(--color-accent-coral)]/40 hover:bg-[color:var(--color-accent-coral-soft)]/30">
+    <div className="group flex items-center gap-3 rounded-xl border border-[color:var(--color-border-subtle)] bg-[color:var(--color-surface-card)] px-3.5 py-3 transition-all hover:border-[color:var(--color-primary-light)] hover:shadow-[var(--shadow-md)]">
       {/* Icon */}
       <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-[color:var(--color-accent-coral-soft)]">
         <Receipt className="h-4 w-4 text-[color:var(--color-accent-coral)]" />
@@ -668,7 +667,7 @@ function TransferRow({
       className={`flex items-center gap-3 rounded-xl border px-3.5 py-3 transition-colors ${
         isSettled
           ? 'border-[color:var(--color-accent-success)]/20 bg-[color:var(--color-success-bg)] opacity-60'
-          : 'border-[color:var(--color-border-subtle)] bg-[color:var(--color-surface-muted)]'
+          : 'border-[color:var(--color-border-subtle)] bg-[color:var(--color-surface-card)]'
       }`}
     >
       {/* State icon */}
@@ -724,13 +723,11 @@ function TransferRow({
 function InvoiceDetailModal({
   invoice,
   people,
-  balances,
   currency,
   onClose,
 }: {
   invoice: InvoiceForUI
   people: PersonForUI[]
-  balances: Balance[]
   currency: string
   onClose: () => void
 }) {
@@ -751,36 +748,35 @@ function InvoiceDetailModal({
     modalRef.current?.focus()
   }, [])
 
-  // Per-person summary for this invoice
+  // Per-person summary — mirrors SettlementService logic exactly
+  const tip = roundToCents(invoice.tipAmount ?? 0)
+  const tipReceivers = invoice.birthdayPersonId
+    ? invoice.participantIds.filter((id) => id !== invoice.birthdayPersonId)
+    : invoice.participantIds
+  const tipShare = tipReceivers.length > 0 ? roundToCents(tip / tipReceivers.length) : 0
+
   const perPersonSummary = invoice.participantIds.map((personId) => {
-    const b = balances.find((x) => x.personId === personId)
-    let consumed = 0
-    if (invoice.divisionMethod === 'consumption' && invoice.items) {
-      for (const item of invoice.items) {
-        const consumers = (item as unknown as { consumers?: string[] }).consumers ?? []
-        if (consumers.includes(personId)) {
-          consumed += (item.unitPrice * item.quantity) / consumers.length
-        }
-      }
+    let base = 0
+
+    if (invoice.divisionMethod === 'consumption') {
+      base = roundToCents(Number((invoice.consumptions ?? {})[personId] ?? 0))
     } else {
-      const participantCount = invoice.participantIds.length
-      if (invoice.birthdayPersonId && invoice.birthdayPersonId !== personId) {
-        consumed = (invoice.amount) / (participantCount - 1)
-      } else if (invoice.birthdayPersonId && invoice.birthdayPersonId === personId) {
-        consumed = 0
+      const count = invoice.participantIds.length
+      const equalShare = count > 0 ? roundToCents(invoice.amount / count) : 0
+      if (invoice.birthdayPersonId === personId) {
+        base = 0
+      } else if (invoice.birthdayPersonId) {
+        const nonBirthday = invoice.participantIds.filter((id) => id !== invoice.birthdayPersonId)
+        base = nonBirthday.length > 0 ? roundToCents(invoice.amount / nonBirthday.length) : equalShare
       } else {
-        consumed = invoice.amount / participantCount
-      }
-      // Add tip share
-      if (invoice.tipAmount && invoice.birthdayPersonId !== personId) {
-        const tippers = invoice.participantIds.filter(
-          (id) => id !== invoice.birthdayPersonId,
-        )
-        consumed += invoice.tipAmount / tippers.length
+        base = equalShare
       }
     }
+
+    const personTip = tipReceivers.includes(personId) ? tipShare : 0
+    const consumed = roundToCents(base + personTip)
     const paid = personId === invoice.payerId ? total : 0
-    return { personId, paid, consumed: roundToCents(consumed), net: roundToCents(paid - consumed) }
+    return { personId, paid, consumed, net: roundToCents(paid - consumed) }
   })
 
   return (
