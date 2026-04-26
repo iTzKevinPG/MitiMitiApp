@@ -149,7 +149,7 @@ function EventDetailPage() {
   useEffect(() => {
     const hasAuthToken =
       typeof window !== 'undefined' &&
-      Boolean(window.localStorage.getItem('fairsplit_auth_token'))
+      Boolean(window.localStorage.getItem('mitimiti_auth_token'))
     if (!hasAuthToken || !selectedEvent) return
     void loadTransferStatuses(selectedEvent.id)
   }, [loadTransferStatuses, selectedEvent])

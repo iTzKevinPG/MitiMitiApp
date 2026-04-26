@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { Users, Receipt, ArrowRightLeft, Sparkles, X } from 'lucide-react'
 import { Button } from '../../shared/components/ui/button'
 
-const STORAGE_KEY = 'fairsplit_welcome_seen'
+const STORAGE_KEY = 'mitimiti_welcome_seen'
 
 const features = [
   {

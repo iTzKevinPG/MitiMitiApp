@@ -43,7 +43,7 @@ function EventListPage() {
   const visibleEvents = events.filter((event) => !event.isPublic)
   const hasAuthToken =
     typeof window !== 'undefined' &&
-    Boolean(window.localStorage.getItem('fairsplit_auth_token'))
+    Boolean(window.localStorage.getItem('mitimiti_auth_token'))
 
   useEffect(() => {
     if (hasLoadedRef.current) return

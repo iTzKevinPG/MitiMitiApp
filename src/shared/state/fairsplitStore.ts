@@ -56,10 +56,10 @@ const invoiceRepository = new InMemoryInvoiceRepository(eventRepository)
 let demoSeeded = false
 const loadedEventData = new Set<string>()
 const loadingEventData = new Set<string>()
-const LOCAL_STORAGE_KEY = 'fairsplit_local_state'
+const LOCAL_STORAGE_KEY = 'mitimiti_local_state'
 
 type LocalState = Pick<
-  FairSplitState,
+  mitimitiState,
   'events' | 'selectedEventId' | 'transferStatusesByEvent' | 'hasSeededDemo'
 >
 
@@ -74,7 +74,7 @@ function readLocalState(): LocalState | null {
   }
 }
 
-function writeLocalState(state: FairSplitState) {
+function writeLocalState(state: mitimitiState) {
   if (typeof window === 'undefined') return
   const payload: LocalState = {
     events: state.events,
@@ -87,7 +87,7 @@ function writeLocalState(state: FairSplitState) {
 
 function getAuthToken(): string | null {
   return typeof window !== 'undefined'
-    ? localStorage.getItem('fairsplit_auth_token')
+    ? localStorage.getItem('mitimiti_auth_token')
     : null
 }
 
@@ -173,7 +173,7 @@ async function handleUnauthorizedAndRedirect() {
   }
 }
 
-interface FairSplitState {
+interface mitimitiState {
   events: Event[]
   selectedEventId?: EventId
   hasSeededDemo: boolean
@@ -223,7 +223,7 @@ interface FairSplitState {
   resetForLogout: () => Promise<void>
 }
 
-export const useFairSplitStore = create<FairSplitState>((set, get) => ({
+export const usemitimitiStore = create<mitimitiState>((set, get) => ({
   events: [],
   selectedEventId: undefined,
   hasSeededDemo: false,
@@ -923,7 +923,7 @@ export const useFairSplitStore = create<FairSplitState>((set, get) => ({
 
 if (typeof window !== 'undefined') {
   let saveTimeout: number | null = null
-  useFairSplitStore.subscribe((state) => {
+  usemitimitiStore.subscribe((state) => {
     if (getAuthToken()) return
     if (saveTimeout !== null) {
       window.clearTimeout(saveTimeout)
@@ -941,7 +941,7 @@ function buildTransferStatusKey(fromPersonId: string, toPersonId: string) {
 
 async function loadEventData(
   eventId: EventId,
-  setFn: StoreApi<FairSplitState>['setState'],
+  setFn: StoreApi<mitimitiState>['setState'],
 ) {
   if (loadedEventData.has(eventId) || loadingEventData.has(eventId)) {
     return
@@ -1027,7 +1027,7 @@ async function loadEventData(
     })
 
     const events = await eventRepository.list()
-    setFn((state: FairSplitState) => ({
+    setFn((state: mitimitiState) => ({
       events,
       selectedEventId: state.selectedEventId ?? eventId,
     }))

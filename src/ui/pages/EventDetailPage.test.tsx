@@ -2,11 +2,11 @@ import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { MemoryRouter, Route, Routes } from 'react-router-dom'
 import EventDetailPage from './EventDetailPage'
-import { useAppStore as useFairSplitStore } from '../../shared/state/appStore'
+import { useAppStore as usemitimitiStore } from '../../shared/state/appStore'
 
 describe('EventDetailPage', () => {
   beforeEach(() => {
-    useFairSplitStore.setState({
+    usemitimitiStore.setState({
       events: [],
       selectedEventId: undefined,
       hasSeededDemo: false,
@@ -15,7 +15,7 @@ describe('EventDetailPage', () => {
 
   it('renders event name and currency in header', async () => {
     const { createEvent, hydrate, seedDemoData, selectEvent } =
-      useFairSplitStore.getState()
+      usemitimitiStore.getState()
 
     const created = await createEvent({ name: 'Fiesta', currency: 'EUR' })
     if (!created) throw new Error('Expected event to be created in guest mode')
@@ -38,7 +38,7 @@ describe('EventDetailPage', () => {
   })
 
   it('allows switching tabs without losing context', async () => {
-    const { createEvent, selectEvent } = useFairSplitStore.getState()
+    const { createEvent, selectEvent } = usemitimitiStore.getState()
     const created = await createEvent({ name: 'Tabs', currency: 'USD' })
     if (!created) throw new Error('Expected event to be created in guest mode')
     selectEvent(created.id)

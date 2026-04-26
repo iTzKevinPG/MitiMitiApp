@@ -56,9 +56,9 @@ const invoiceRepository = new InMemoryInvoiceRepository(eventRepository)
 let demoSeeded = false
 const loadedEventData = new Set<string>()
 const loadingEventData = new Set<string>()
-// NOTE: key kept as 'fairsplit_local_state' intentionally — renaming would wipe existing user data.
+// NOTE: key kept as 'mitimiti_local_state' intentionally — renaming would wipe existing user data.
 // Migrate with a dual-key fallback in a future release.
-const LOCAL_STORAGE_KEY = 'fairsplit_local_state'
+const LOCAL_STORAGE_KEY = 'mitimiti_local_state'
 
 type LocalState = Pick<
   AppState,
@@ -89,7 +89,7 @@ function writeLocalState(state: AppState) {
 
 function getAuthToken(): string | null {
   return typeof window !== 'undefined'
-    ? localStorage.getItem('fairsplit_auth_token')
+    ? localStorage.getItem('mitimiti_auth_token')
     : null
 }
 

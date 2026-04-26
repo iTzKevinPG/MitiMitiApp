@@ -41,7 +41,7 @@ type CreateInvoicePayload = {
 function buildHeaders() {
   const token =
     typeof window !== 'undefined'
-      ? localStorage.getItem('fairsplit_auth_token')
+      ? localStorage.getItem('mitimiti_auth_token')
       : null;
   if (!token) {
     throw new Error('NO_AUTH_TOKEN');
@@ -55,7 +55,7 @@ function buildHeaders() {
 function buildOptionalAuthHeaders(): HeadersInit | undefined {
   const token =
     typeof window !== 'undefined'
-      ? localStorage.getItem('fairsplit_auth_token')
+      ? localStorage.getItem('mitimiti_auth_token')
       : null;
   return token ? { Authorization: `Bearer ${token}` } : undefined;
 }

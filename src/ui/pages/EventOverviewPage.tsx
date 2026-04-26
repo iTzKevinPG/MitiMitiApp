@@ -45,7 +45,7 @@ function EventOverviewPage() {
     if (!eventId) return
     const hasAuthToken =
       typeof window !== 'undefined' &&
-      Boolean(window.localStorage.getItem('fairsplit_auth_token'))
+      Boolean(window.localStorage.getItem('mitimiti_auth_token'))
     if (hasAuthToken) {
       void refreshEventDetails(eventId)
       return
@@ -67,7 +67,7 @@ function EventOverviewPage() {
   useEffect(() => {
     const hasAuthToken =
       typeof window !== 'undefined' &&
-      Boolean(window.localStorage.getItem('fairsplit_auth_token'))
+      Boolean(window.localStorage.getItem('mitimiti_auth_token'))
     if (!hasAuthToken || !selectedEvent) return
     void loadTransferStatuses(selectedEvent.id)
   }, [loadTransferStatuses, selectedEvent])

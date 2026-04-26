@@ -324,7 +324,7 @@ export function InvoiceSection({
     } else {
       const hasAuthToken =
         typeof window !== 'undefined' &&
-        Boolean(window.localStorage.getItem('fairsplit_auth_token'))
+        Boolean(window.localStorage.getItem('mitimiti_auth_token'))
       if (scanJobId && hasAuthToken) {
         try {
           await confirmScanApi(scanJobId, {
@@ -540,7 +540,7 @@ export function InvoiceSection({
       setScanStatus('uploading')
       const hasAuthToken =
         typeof window !== 'undefined' &&
-        Boolean(window.localStorage.getItem('fairsplit_auth_token'))
+        Boolean(window.localStorage.getItem('mitimiti_auth_token'))
       setScanIsGuest(!hasAuthToken)
       const jobId = useRescan && scanJobId
         ? (await rescanInvoiceApi(scanJobId, eventId, file)).jobId
