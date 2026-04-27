@@ -529,16 +529,9 @@ function PersonCard({
 
         {/* Info */}
         <div className="flex min-w-0 flex-1 flex-col gap-1">
-          <div className="flex items-center gap-1.5">
-            <span className="truncate text-sm font-bold text-[color:var(--color-text-main)]">
-              {person.name}
-            </span>
-            {isSettled && (
-              <span className="shrink-0 rounded-full bg-[color:var(--color-accent-success)]/20 px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-wide text-[color:var(--color-accent-success)]">
-                ✓ Saldado
-              </span>
-            )}
-          </div>
+          <span className="truncate text-sm font-bold text-[color:var(--color-text-main)]">
+            {person.name}
+          </span>
 
           {balance && (
             <div className="flex flex-wrap gap-x-3 gap-y-0.5 text-[10px] text-[color:var(--color-text-muted)]">
@@ -559,17 +552,23 @@ function PersonCard({
               ) : null}
               <AmountDisplay amount={balance.net} currency={currency} showSign size="sm" />
             </div>
-            <span
-              className={`text-[9px] font-bold uppercase tracking-wider ${
-                isCreditor
-                  ? 'text-[color:var(--color-accent-success)]'
-                  : isDebtor
-                    ? 'text-[color:var(--color-accent-danger)]'
-                    : 'text-[color:var(--color-text-muted)]'
-              }`}
-            >
-              {isCreditor ? 'A recibir' : isDebtor ? 'A pagar' : 'En paz'}
-            </span>
+            {isSettled ? (
+              <span className="rounded-full bg-[color:var(--color-accent-success)]/20 px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-wide text-[color:var(--color-accent-success)]">
+                ✓ Saldado
+              </span>
+            ) : (
+              <span
+                className={`text-[9px] font-bold uppercase tracking-wider ${
+                  isCreditor
+                    ? 'text-[color:var(--color-accent-success)]'
+                    : isDebtor
+                      ? 'text-[color:var(--color-accent-danger)]'
+                      : 'text-[color:var(--color-text-muted)]'
+                }`}
+              >
+                {isCreditor ? 'A recibir' : isDebtor ? 'A pagar' : 'En paz'}
+              </span>
+            )}
           </div>
         )}
       </div>
