@@ -185,7 +185,7 @@ export function ExpenseEditorModal({
               return (
                 <div
                   key={step}
-                  className={`rounded-2xl border px-3 py-2.5 transition-all ${
+                  className={`rounded-xl border px-2 py-1.5 transition-all sm:rounded-2xl sm:px-3 sm:py-2.5 ${
                     state === 'current'
                       ? 'border-[color:var(--color-primary-light)] bg-[color:var(--color-primary-soft)] shadow-[var(--shadow-sm)]'
                       : state === 'done'
@@ -193,9 +193,9 @@ export function ExpenseEditorModal({
                       : 'border-[color:var(--color-border-subtle)] bg-[color:var(--color-surface-muted)]/50'
                   }`}
                 >
-                  <div className="flex items-center gap-2">
+                  <div className="flex items-center gap-1.5 sm:gap-2">
                     <div
-                      className={`flex h-7 w-7 items-center justify-center rounded-full text-[11px] font-bold ${
+                      className={`flex h-5 w-5 shrink-0 items-center justify-center rounded-full text-[10px] font-bold sm:h-7 sm:w-7 sm:text-[11px] ${
                         state === 'current'
                           ? 'bg-[color:var(--color-primary-main)] text-[color:var(--color-text-on-primary)]'
                           : state === 'done'
@@ -203,13 +203,13 @@ export function ExpenseEditorModal({
                           : 'bg-[color:var(--color-surface-card)] text-[color:var(--color-text-muted)]'
                       }`}
                     >
-                      {state === 'done' ? <CheckCircle2 className="h-4 w-4" /> : index + 1}
+                      {state === 'done' ? <CheckCircle2 className="h-3 w-3 sm:h-4 sm:w-4" /> : index + 1}
                     </div>
                     <div className="min-w-0">
-                      <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-[color:var(--color-text-muted)]">
+                      <p className="hidden text-[10px] font-semibold uppercase tracking-[0.16em] text-[color:var(--color-text-muted)] sm:block">
                         Paso {index + 1}
                       </p>
-                      <p className="truncate text-sm font-semibold text-[color:var(--color-text-main)]">
+                      <p className="truncate text-xs font-semibold text-[color:var(--color-text-main)] sm:text-sm">
                         {stepLabels[step]}
                       </p>
                     </div>
@@ -764,13 +764,13 @@ export function ExpenseEditorModal({
                 ? 'Si eliges consumo, el siguiente paso sera para los items.'
                 : 'Avanza paso a paso para no perder detalle.'}
             </div>
-            <div className="flex flex-col-reverse gap-2 sm:flex-row">
+            <div className="flex flex-row gap-2">
               <Button
                 type="button"
                 variant="ghost"
                 size="sm"
                 onClick={isFirstStep ? onClose : onBack}
-                className="w-full sm:w-auto"
+                className="flex-1"
               >
                 {isFirstStep ? 'Cancelar' : (
                   <>
@@ -785,7 +785,7 @@ export function ExpenseEditorModal({
                   size="sm"
                   onClick={onSubmit}
                   data-tour="invoice-save"
-                  className="w-full sm:w-auto"
+                  className="flex-1"
                 >
                   {mode === 'edit' ? 'Guardar cambios' : 'Guardar gasto'}
                 </Button>
@@ -795,7 +795,7 @@ export function ExpenseEditorModal({
                   size="sm"
                   onClick={onNext}
                   data-tour="invoice-step-next"
-                  className="w-full sm:w-auto"
+                  className="flex-1"
                 >
                   Continuar
                 </Button>

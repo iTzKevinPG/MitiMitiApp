@@ -1,3 +1,4 @@
+import { createPortal } from 'react-dom'
 import { X, ShoppingBag, Hash, DollarSign, Users } from 'lucide-react'
 import { Button } from '../../../shared/components/ui/button'
 import { Input } from '../../../shared/components/ui/input'
@@ -47,7 +48,7 @@ export function InvoiceItemModal({
   onClose,
   onSave,
 }: InvoiceItemModalProps) {
-  if (!open) return null
+  if (!open || typeof document === 'undefined') return null
 
   const unitPrice = Number(itemUnitPrice) || 0
   const quantity = Number(itemQuantity) || 0
@@ -84,8 +85,8 @@ export function InvoiceItemModal({
     })
   }
 
-  return (
-    <div className="fixed inset-0 z-50 flex items-end justify-center bg-black/40 px-0 backdrop-blur-sm sm:items-center sm:px-4 sm:py-6">
+  return createPortal(
+    <div className="fixed inset-0 z-[80] flex items-end justify-center bg-black/40 px-0 backdrop-blur-sm sm:items-center sm:px-4 sm:py-6">
       <div
         className="ds-card-glow animate-fade-in relative w-full max-w-lg rounded-t-3xl border border-[color:var(--color-border-subtle)] bg-[color:var(--color-surface-card)] p-5 shadow-[var(--shadow-lg)] sm:rounded-[var(--radius-lg)]"
         role="dialog"
@@ -250,6 +251,7 @@ export function InvoiceItemModal({
           </div>
         </div>
       </div>
-    </div>
+    </div>,
+    document.body,
   )
 }
