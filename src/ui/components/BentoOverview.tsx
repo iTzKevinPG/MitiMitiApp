@@ -594,7 +594,7 @@ function InvoiceCard({
   const total = roundToCents(invoice.amount + (invoice.tipAmount ?? 0))
 
   return (
-    <div className="group flex items-center gap-3 rounded-xl border border-[color:var(--color-border-subtle)] bg-[color:var(--color-surface-card)] px-3.5 py-3 transition-all hover:border-[color:var(--color-primary-light)] hover:shadow-[var(--shadow-md)]">
+    <div className="group flex min-w-0 items-center gap-3 overflow-hidden rounded-xl border border-[color:var(--color-border-subtle)] bg-[color:var(--color-surface-card)] px-3.5 py-3 transition-all hover:border-[color:var(--color-primary-light)] hover:shadow-[var(--shadow-md)]">
       {/* Icon */}
       <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-[color:var(--color-accent-coral-soft)]">
         <Receipt className="h-4 w-4 text-[color:var(--color-accent-coral)]" />
@@ -605,30 +605,27 @@ function InvoiceCard({
         <span className="truncate text-sm font-bold text-[color:var(--color-text-main)]">
           {invoice.description}
         </span>
-        <div className="flex flex-wrap items-center gap-x-2 gap-y-0.5 text-[10px] text-[color:var(--color-text-muted)]">
-          <span className="flex items-center gap-1">
+        <div className="flex min-w-0 flex-wrap items-center gap-x-1.5 gap-y-0.5 text-[10px] text-[color:var(--color-text-muted)]">
+          <span className="flex shrink-0 items-center gap-1">
             <CreditCard className="h-2.5 w-2.5" />
             {resolvePersonName(invoice.payerId, people)}
           </span>
-          <span>·</span>
-          <span>
+          <span className="shrink-0">·</span>
+          <span className="shrink-0">
             {invoice.participantIds.length} persona{invoice.participantIds.length !== 1 ? 's' : ''}
           </span>
-          <span>·</span>
-          <span>{invoice.divisionMethod === 'consumption' ? 'Por consumo' : 'Partes iguales'}</span>
+          <span className="shrink-0">·</span>
+          <span className="shrink-0">{invoice.divisionMethod === 'consumption' ? 'Por consumo' : 'Partes iguales'}</span>
           {invoice.tipAmount ? (
-            <>
-              <span>·</span>
-              <span className="text-[color:var(--color-accent-warning)]">
-                +{fmtAmount(invoice.tipAmount, currency)} propina
-              </span>
-            </>
+            <span className="shrink-0 text-[color:var(--color-accent-warning)]">
+              · +{fmtAmount(invoice.tipAmount, currency)} propina
+            </span>
           ) : null}
         </div>
       </div>
 
       {/* Amount + CTA */}
-      <div className="flex shrink-0 flex-col items-end gap-1.5">
+      <div className="flex w-fit shrink-0 flex-col items-end gap-1.5">
         <span className="text-sm font-bold text-[color:var(--color-primary-main)] tabular-nums">
           {fmtAmount(total, currency)}
         </span>

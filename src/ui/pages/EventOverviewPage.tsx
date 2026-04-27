@@ -203,7 +203,7 @@ function EventOverviewPage() {
   }
 
   return (
-    <div className="flex min-h-screen flex-col bg-[color:var(--color-app-bg)]">
+    <div className="flex min-h-screen flex-col overflow-x-hidden bg-[color:var(--color-app-bg)]">
       <header className="sticky top-0 z-40 border-b border-[color:var(--color-border-subtle)] bg-[color:var(--color-app-bg)]/95 backdrop-blur">
         <div className="mx-auto flex h-16 max-w-5xl items-center justify-between px-6">
           <div className="flex items-center gap-3">
